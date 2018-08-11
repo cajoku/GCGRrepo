@@ -55,17 +55,6 @@ Sub fixFORM()
 
 End Sub
 
-Sub hkjl()
-
-Dim shp As Shape
-For Each shp In ActiveSheet.Shapes
-    shp.LockAspectRatio = False
-    
-    
-Next
-
-End Sub
-
 Sub callCONTEXT()
     
     Set cmenu = New contextMENUcls
