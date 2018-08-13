@@ -27,6 +27,7 @@ Attribute groWS.VB_VarHelpID = -1
 Public WithEvents schedWS As Worksheet
 Attribute schedWS.VB_VarHelpID = -1
 Public WithEvents gantWS As Worksheet
+Attribute gantWS.VB_VarHelpID = -1
 Private cStartRan As Range, cEndRan As Range, perRan As Range, durRan As Range, jstartRan As Range, jendRan As Range, pStartRan As Range, pEndRan As Range
 Private durCol As Range, perCol As Range, perCOL2 As Range, dendCOL As Range, jobCOL As Range, jobCOL2 As Range, jobDUR As Range, jobDUR2 As Range
 Private hROW As Range, eROW As Range

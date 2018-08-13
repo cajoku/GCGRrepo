@@ -3,18 +3,6 @@ Attribute VB_Name = "tests"
 Option Explicit
 Public sched As schedFORM
 
-
-Sub fuckpoop()
-
-Dim RAN As Range
-
-Set RAN = Selection
-Set RAN = RAN.SpecialCells(xlCellTypeSameFormatConditions)
-RAN.Select
-
-
-End Sub
-
 Sub tempSYNC(RAN As Range)
     Dim WS As Worksheet
     Set WS = RAN.Parent
