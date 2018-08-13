@@ -392,7 +392,7 @@ On Error GoTo e1
         If delta >= 1 Then
             'lastCol.EntireColumn.Insert
             WS.Range(lastCol, lastCol.Offset(0, delta - 1)).EntireColumn.Insert
-        ElseIf delta < 1 Then
+        ElseIf delta < 1 And delta <> 0 Then
             WS.Range(deleteRAN.Offset(0, delta + 1), deleteRAN).EntireColumn.Delete
             'lastCol.Offset(0, -1).EntireColumn.Delete
             'If i = Abs(delta) Then Set deleteRAN = Range(deleteRAN, lastCol.Offset(0, -1)): deleteRAN.EntireColumn.Delete

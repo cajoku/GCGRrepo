@@ -310,7 +310,9 @@ On Error GoTo e1
                 .Offset(1, 0).EntireRow.Insert
                 If .Parent.Name = masterOBJ.gantWS.Name Then
                     For Each shp In .Parent.Shapes
-                        If shp.TopLeftCell.EntireRow.Address = .Offset(1, 0).EntireRow.Address Then shp.Delete
+                        If Left(shp.Name, 2) = "\b" Then
+                            If shp.TopLeftCell.EntireRow.Address = .Offset(1, 0).EntireRow.Address Then shp.Delete
+                        End If
                     Next
                     newGant.createBar .Offset(1, 0)
                 End If
