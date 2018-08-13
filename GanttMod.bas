@@ -16,6 +16,7 @@ On Error GoTo e1
     
     EnS 0
     
+    Set buttonCls = Nothing
     For Each shp In WS.Shapes
         If shp.TopLeftCell.EntireRow.Cells(1, 1).Address = RAN.EntireRow.Cells(1, 1).Address Then shp.Delete: Exit For
     Next

@@ -27,6 +27,7 @@ Attribute groWS.VB_VarHelpID = -1
 Public WithEvents schedWS As Worksheet
 Attribute schedWS.VB_VarHelpID = -1
 Public WithEvents gantWS As Worksheet
+Attribute gantWS.VB_VarHelpID = -1
 Private cStartRan As Range, cEndRan As Range, perRan As Range, durRan As Range, jstartRan As Range, jendRan As Range, pStartRan As Range, pEndRan As Range
 Private durCol As Range, perCol As Range, perCOL2 As Range, dendCOL As Range, jobCOL As Range, jobCOL2 As Range, jobDUR As Range, jobDUR2 As Range
 Private hROW As Range, eROW As Range
@@ -726,20 +727,10 @@ On Error GoTo e1
     Dim mergeRAN As Range, catRAN As Range
     
     Set buttonCls = Nothing
-'
-'    Set mergeRAN = boxRANGE(schedWS, "\r_header", "\r_start", "\c_merge")
-'    trimRANGE mergeRAN, dsupdown
-'
+
     Set catRAN = boxRANGE(schedWS, "\r_header", "\c_editStart", "\c_schedEnd")
     trimRANGE catRAN, dsRIGHT
     Set catRAN = catRAN.Offset(-1, 0)
-    
-'    If Not mergeRAN Is Nothing Then
-'        If Union(Target, mergeRAN).Address = mergeRAN.Address Then
-'            Set buttonCls = New AddDeleteButton
-'            buttonCls.setSchedAnchor Target
-'        End If
-'    End If
     
     If Not catRAN Is Nothing Then
         If Union(Target, catRAN).Address = catRAN.Address Then
@@ -790,6 +781,7 @@ On Error GoTo e1
                 Target.Offset(-1, 0).EntireRow.PasteSpecial xlPasteFormats
                 Target.Offset(-1, 0).Value = phaseName
                 Target.Offset(-1, -1).Value = tempPhase.Cells(1, 1).Value
+                Target.Offset(-1, 2).Select
                 tempPhase.Hidden = True
                 newGant.createBar Target.Offset(-1, 0)
             End If
@@ -863,17 +855,15 @@ On Error GoTo e1
             ElseIf Union(cell, phaseDur).Address = phaseDur.Address Then
                 Set tempRAN = predRAN.Find(What:=Intersect(cell.EntireRow, descCOL).Value)
                 If Not tempRAN Is Nothing Then
-                    formSTR = Intersect(tempRAN.EntireRow, phaseStart).Formula '.Address(False, True)
+                    formSTR = Intersect(tempRAN.EntireRow, phaseStart).Formula
                     predStr = Intersect(tempRAN.EntireRow, gantWS.[\pred].EntireColumn).Value
                     lagstr2 = Intersect(tempRAN.EntireRow, gantWS.[\lag].EntireColumn).Value
-                    'lagstr = Intersect(tempRAN.EntireRow, gantWS.[\lag].EntireColumn).Address(False, True)
                     predStr = tempRAN.Value
                     Application.EnableEvents = True
                     Intersect(tempRAN.EntireRow, gantWS.[\c_gstart].EntireColumn).Value = Intersect(cell.EntireRow, phaseStart).Value + Intersect(cell.EntireRow, phaseDur).Value + lagstr2
                     Application.EnableEvents = False
                     Intersect(tempRAN.EntireRow, gantWS.[\pred].EntireColumn).Value = predStr
                     Intersect(tempRAN.EntireRow, gantWS.[\lag].EntireColumn).Value = lagstr2
-                    'formSTR = "=INDEX(" & phaseStart.Address & ",MATCH(" & formSTR & ",\gid,0))+INDEX(" & phaseDur.Address & ",MATCH(" & formSTR & ",\gid,0))+" & lagstr
                     Intersect(tempRAN.EntireRow, gantWS.[\c_gstart].EntireColumn).Formula = formSTR
                     Application.EnableEvents = True
                 End If
