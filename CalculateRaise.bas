@@ -6,7 +6,7 @@ On Error GoTo ehandle
 
     Dim WS As Worksheet
     Dim monthRan As Range, cell As Range, sMonthRan As Range, mRan As Range
-    Dim startDate As Date, enddate As Date, fiscalYearStart As Date, counter As Date, oStartDate As Date, currentDate As Date
+    Dim startDate As Date, endDate As Date, fiscalYearStart As Date, counter As Date, oStartDate As Date, currentDate As Date
     Dim fyCount As Integer, i As Integer, j As Integer, q As Integer, p As Integer, weeks As Double, months As Integer, startMonth As Integer, raiseCurrent As Double
     Dim pTime As Double, raise As Double
     Dim wColl As Collection, pColl As Collection
@@ -25,7 +25,7 @@ On Error GoTo ehandle
     raise = phase.Value
     startDate = startRAN.Value
     currentDate = Now()
-    enddate = endRAN.Value
+    endDate = endRAN.Value
     oStartDate = startDate
     
     raiseCurrent = FindRaise(currentDate, startDate, raise) 'raisecurrent added 7/26 bc raise calculation should begin from current date instead of staff start
@@ -48,10 +48,10 @@ On Error GoTo ehandle
     End If
 '=============================
         
-    If startDate = 0 Or enddate = 0 Then GoTo quickout
+    If startDate = 0 Or endDate = 0 Then GoTo quickout
     
     i = 1: p = 1
-    For j = 1 To DateDiff("m", startDate, enddate)
+    For j = 1 To DateDiff("m", startDate, endDate)
         counter = DateAdd("m", i, startDate)
         If DatePart("m", counter) = 9 Then
             fiscalYearStart = FYstart(counter)
@@ -66,12 +66,12 @@ On Error GoTo ehandle
             pTime = 0
             startDate = counter
             i = 0
-            If j <> DateDiff("m", oStartDate, enddate) Then fyCount = fyCount + 1
-        ElseIf j = DateDiff("m", oStartDate, enddate) Then
+            If j <> DateDiff("m", oStartDate, endDate) Then fyCount = fyCount + 1
+        ElseIf j = DateDiff("m", oStartDate, endDate) Then
             If fyCount > 1 Then 'added this condition and the else clause to account for durations that do not reach the next fiscal year 3/22
-                weeks = Abs(startDate - enddate) / 7
+                weeks = Abs(startDate - endDate) / 7
             Else
-                weeks = Abs(oStartDate - enddate) / 7
+                weeks = Abs(oStartDate - endDate) / 7
             End If
             months = DateDiff("m", startDate, counter)
             wColl.Add weeks
