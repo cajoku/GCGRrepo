@@ -127,7 +127,7 @@ Sub asjfhkj()
 
 Dim WS As Worksheet
 Dim startRAN As Range, endRAN As Range, mcountran As Range, posstart As Range, posend As Range
-Dim startDate As Date, enddate As Date, raisedate As Date
+Dim startDate As Date, endDate As Date, raisedate As Date
 Dim row As Integer, numyears As Integer, year As Date
 
 Set WS = ActiveSheet
@@ -136,9 +136,9 @@ Set endRAN = WS.[\cend]
 
 row = 14
 startDate = startRAN.Value
-enddate = endRAN.Value
-year = DatePart("yyyy", enddate)
-numyears = DateDiff("yyyy", startDate, enddate)
+endDate = endRAN.Value
+year = DatePart("yyyy", endDate)
+numyears = DateDiff("yyyy", startDate, endDate)
 
 Debug.Print "numyears = "; numyears
 End Sub
@@ -149,7 +149,7 @@ Sub testdateloop()
 
 Dim WS As Worksheet
 Dim startRAN As Range, endRAN As Range, mcountran As Range, posstart As Range, posend As Range
-Dim startDate As Date, enddate As Date, raisedate As Date
+Dim startDate As Date, endDate As Date, raisedate As Date
 Dim row As Integer, numyears As Integer, year As Date, mcount As Date, i As Integer, j As Integer
 Dim rcount As Integer, mprior As Integer, mafter As Integer, q As Integer, p As Integer
 Dim var() As Integer
@@ -160,13 +160,13 @@ Set endRAN = WS.[\cend]
 
 
 startDate = startRAN.Value
-enddate = endRAN.Value
-year = DatePart("yyyy", enddate)
-numyears = DateDiff("yyyy", startDate, enddate)
+endDate = endRAN.Value
+year = DatePart("yyyy", endDate)
+numyears = DateDiff("yyyy", startDate, endDate)
 
 
 q = 0: p = 1
-For j = 1 To DateDiff("m", startDate, enddate)
+For j = 1 To DateDiff("m", startDate, endDate)
     mcount = DateAdd("m", j, startDate)
     If DatePart("m", mcount) = 9 Then
         ReDim Preserve var(1, q) 'stores fiscal yr count in "0" portion and amount of months in before fiscal year in "1" portion

@@ -122,6 +122,8 @@ On Error GoTo ehandle
     
     Application.DisplayAlerts = False
     
+    sdWS.Shapes("\\moreratedetail").Select
+    
     If Union(Target, startRAN).Address = startRAN.Address Then
         If IsDate(Target.Value) Then
             'sdWS.Activate
@@ -231,6 +233,7 @@ On Error GoTo ehandle
         Next
     End If
     
+    ActiveCell.Select
     Application.DisplayAlerts = True
 quickout:
     EnS 1, , True
@@ -463,15 +466,6 @@ On Error GoTo ehandle
         Else
             ActiveWindow.DisplayZeros = True
         End If
-        
-'        If cStartRan.Value <> 0 And cEndRan.Value <> 0 Then
-'        'If mZone.Columns.Count > 1 Then
-'            If masterOBJ.gantWS.Visible <> xlSheetVisible Then
-'                masterOBJ.gantWS.Visible = xlSheetVisible
-'                'Application.Calculate
-'                'newGant.registerGanttWS masterOBJ.gantWS, masterOBJ.gantWS.[\c_gstart], masterOBJ.gantWS.[\c_gdur], masterOBJ.gantWS.[\c_t0]
-'            End If
-'        End If
         Application.CalculateFull
     End If
     
