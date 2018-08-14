@@ -46,7 +46,7 @@ On Error GoTo ehandle
 
     Dim durCell As Range, perCell As Range, startcell As Range, mRan As Range
     Dim fstart As Integer, fend As Integer
-    Dim startDate As Date, enddate As Date
+    Dim startDate As Date, endDate As Date
     
     Set perCell = Cells(cell.row, Range("\c_perTIME").Column)
     Set mRan = Cells(cell.row, Range("\c_durSTART").Column)
@@ -54,7 +54,7 @@ On Error GoTo ehandle
     Set startcell = Cells(cell.row, Range("\c_jobStart").Column)
     
     startDate = Intersect(cell.EntireRow, WS.[\c_posStart].EntireColumn).Value
-    enddate = Intersect(cell.EntireRow, WS.[\c_posEnd].EntireColumn).Value
+    endDate = Intersect(cell.EntireRow, WS.[\c_posEnd].EntireColumn).Value
     
     'added if statement for startcell.value to account for negative start month. Will need to added negative start month functionality at some point 2/19
     If startcell.Value < 0 Then

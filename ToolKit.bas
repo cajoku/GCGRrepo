@@ -481,19 +481,19 @@ Function countSTAFF() As Integer
 
 End Function
 
-Function cDateDiff(ctype As String, startDate As Date, enddate As Date) As Double
+Function cDateDiff(ctype As String, startDate As Date, endDate As Date) As Double
 On Error GoTo e1
    ' "created 4/6 bc built ws DATEDIF() and vba DateDiff return diff values. This will uniformly use vba DD"'
     Dim temp As Double
     Dim neg As Boolean
     
-    If startDate <> 0 Or enddate <> 0 Then
+    If startDate <> 0 Or endDate <> 0 Then
         If UCase(ctype) = "M" Then
-            cDateDiff = DateDiff("M", startDate, enddate)
+            cDateDiff = DateDiff("M", startDate, endDate)
         ElseIf UCase(ctype) = "WW" Then
-            cDateDiff = DateDiff("ww", startDate, enddate)
+            cDateDiff = DateDiff("ww", startDate, endDate)
         Else
-            cDateDiff = DateDiff(UCase(ctype), startDate, enddate)
+            cDateDiff = DateDiff(UCase(ctype), startDate, endDate)
         End If
     End If
     
