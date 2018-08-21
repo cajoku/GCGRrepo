@@ -3,14 +3,14 @@ Sub changeBACK()
     Dim formSTR As String
     Dim RAN As Range
     
-    formSTR = ActiveCell.Comment.Text
+    formSTR = activecell.Comment.Text
     formSTR = Mid(formSTR, 13, Len(formSTR))
     
-    ActiveCell.Formula = formSTR
-    Set RAN = Intersect(ActiveCell.EntireColumn, ActiveCell.Parent.[\r_tempCON].EntireRow)
+    activecell.Formula = formSTR
+    Set RAN = Intersect(activecell.EntireColumn, activecell.Parent.[\r_tempCON].EntireRow)
     RAN.Copy
     
-    ActiveCell.PasteSpecial xlPasteFormats
+    activecell.PasteSpecial xlPasteFormats
 
 
 End Sub

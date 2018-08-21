@@ -85,7 +85,7 @@ On Error GoTo e1
     
     Set headers = boxRANGE(WS, "\r_header", "\c_schedEnd", "\c_schedStart")
     Set headers = headers.Offset(-1, 0)
-    trimRANGE headers, dsSIDES
+    trimRANGE headers, dssides
     trimRANGE headers, dsLEFT
     
     Set schedRAN = boxRANGE(destWS, "\r_schedStart", "\c_desc", "\r_insertSched")
@@ -352,6 +352,7 @@ On Error GoTo e1
     Dim i As Integer, currentRows As Integer, delta As Integer
     
     Set sht = masterOBJ.schedWS
+    sht.Unprotect
     Set inStart = sht.[\r_start]
     Set inTemp = sht.[\r_schedtemp]
     Set existRan = boxRANGE(sht, "\r_header", "\r_start", "\c_schedStart")
@@ -390,6 +391,7 @@ On Error GoTo e1
         'Next
     End If
     
+    basicPROTECT sht, True
     EnS 1
     
     Exit Sub
@@ -413,7 +415,7 @@ On Error GoTo e1
     Set sWS = masterOBJ.schedWS
     Set headRAN = boxRANGE(sWS, "\r_header", "\c_schedEnd", "\c_schedStart")
     Set headRAN = headRAN.Offset(-1, 0)
-    trimRANGE headRAN, dsSIDES
+    trimRANGE headRAN, dssides
     trimRANGE headRAN, dsLEFT
 
     Set codeRAN = codeWS.[\headertbl]
@@ -482,6 +484,7 @@ On Error GoTo e1
     Application.DisplayAlerts = False
     
     Set sht = masterOBJ.schedWS
+    sht.Unprotect
     Set printRAN = Intersect(sht.[\r_header].Offset(1, 0).EntireRow, sht.[\c_print].EntireColumn)
     Set findRAN = boxRANGE(sht, "\r_header", "\r_start", "\c_schedStart")
     trimRANGE findRAN, dsbottom
@@ -571,6 +574,8 @@ RemergeCells:
     
     BalanceMergeSection
             
+    basicPROTECT sht, True
+    
     Application.DisplayAlerts = True
 
     Exit Sub
@@ -587,9 +592,10 @@ On Error GoTo e1
     Dim printRAN As Range, findRAN As Range, mergeRAN As Range, deleteRAN As Range
     
     Set WS = masterOBJ.schedWS
+    WS.Unprotect
     Set printRAN = Intersect(WS.[\r_header].Offset(1, 0).EntireRow, WS.[\c_print].EntireColumn)
     Set mergeRAN = boxRANGE(WS, "\r_header", "\r_start", "\c_merge")
-    trimRANGE mergeRAN, dsupdown
+    trimRANGE mergeRAN, dsbottom
 
     Set deleteRAN = mergeRAN.Find(What:=phaseName)
     
@@ -601,6 +607,7 @@ On Error GoTo e1
     BalanceMergeSection
     End If
     
+    basicPROTECT WS, True
     Exit Sub
 e1:
     LogError "ScheduleMod", "RemoveMergeSection", Err.Description, Err

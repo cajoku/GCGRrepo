@@ -12,8 +12,8 @@ Option Explicit
 Private anchorRAN As Range
 Private WithEvents WS As Worksheet
 Attribute WS.VB_VarHelpID = -1
-Private WithEvents wb As Workbook
-Attribute wb.VB_VarHelpID = -1
+Private WithEvents WB As Workbook
+Attribute WB.VB_VarHelpID = -1
 Private addSHP As Shape
 Private deleSHP As Shape
 Private schedDele As Shape
@@ -56,7 +56,7 @@ On Error GoTo ehandle
     Set anchorRAN = RAN.Cells(1, 1)
     
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
     With anchorRAN
         myL = .Left + .Width - Wmain
@@ -152,7 +152,7 @@ On Error GoTo e1
 
     Set anchorRAN = RAN
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
 
         With anchorRAN
@@ -205,7 +205,7 @@ On Error GoTo e1
 
     Set anchorRAN = RAN
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
     If col = False Then
         With anchorRAN
@@ -268,7 +268,7 @@ Sub trailerANCHOR(RAN As Range)
 On Error GoTo ehandle
     
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
     Set anchorRAN = Intersect(WS.[\c_group].EntireColumn, RAN.EntireRow)
     
@@ -332,7 +332,7 @@ On Error GoTo ehandle
     Set anchorRAN = RAN.Cells(1, 1)
     
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
     With anchorRAN
         myL = .Left + .Width - Wmain
@@ -354,7 +354,7 @@ Sub setPHASE(RAN As Range)
     Set anchorRAN = RAN.Cells(1, 1)
     
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
     With anchorRAN
         myL = .Left

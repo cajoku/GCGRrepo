@@ -12,7 +12,7 @@ On Error GoTo e1
     Dim shp As Shape
     
     Set WS = ActiveSheet
-    Set RAN = ActiveCell
+    Set RAN = activecell
     
     EnS 0
     

@@ -12,8 +12,8 @@ Option Explicit
 Private anchorRAN As Range
 Private WithEvents WS As Worksheet
 Attribute WS.VB_VarHelpID = -1
-Private WithEvents wb As Workbook
-Attribute wb.VB_VarHelpID = -1
+Private WithEvents WB As Workbook
+Attribute WB.VB_VarHelpID = -1
 Private arrowSHP As Shape
 
 '
@@ -51,7 +51,7 @@ On Error GoTo ehandle
     Set anchorRAN = RAN.Cells(1, 1)
     
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
     With anchorRAN
         myL = .Left + .Width + 5 '- Wmain

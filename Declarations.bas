@@ -35,7 +35,7 @@ Public Enum dsDirection
     dsTOP = 3
     dsbottom = 4
     dsupdown = 5
-    dsSIDES = 6
+    dssides = 6
     dsALL = 9
 End Enum
 

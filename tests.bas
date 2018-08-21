@@ -113,7 +113,7 @@ Sub testARRcls()
     Dim frm As arrayFORM
     
     If masterOBJ Is Nothing Then onOPEN
-    Set Target = ActiveCell
+    Set Target = activecell
     Set listRAN = masterOBJ.WS.[sectors]
     Set frm = New arrayFORM
     
@@ -190,7 +190,7 @@ Sub tester()
     Dim ran1 As Range, ran2 As Range
     Set ran1 = ActiveSheet.Range("j14")
     Set ran2 = ActiveSheet.Range("k14")
-    ActiveCell.Value = CalcRaise(ran1, ran2)
+    activecell.Value = CalcRaise(ran1, ran2)
 End Sub
 
 

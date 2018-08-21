@@ -121,7 +121,7 @@ e1:
     LogError "telemetry", "myAPP_SheetActivate", Err.Description, Err
 End Sub
 
-Private Sub myAPP_WorkbookActivate(ByVal wb As Workbook)
+Private Sub myAPP_WorkbookActivate(ByVal WB As Workbook)
 On Error GoTo e1
 
     allWBactivate_i = allWBactivate_i + 1

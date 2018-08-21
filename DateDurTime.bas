@@ -6,14 +6,12 @@ On Error GoTo ehandle
 
     Dim monthRan As Range, pcell As Range, formRAN As Range, cell2 As Range
     Dim endCell As Range, startcell As Range, durCell As Range
-    Dim endcol As Integer
     Dim cellArr As Variant
     
-    endcol = WS.Range("\c_durEND").Offset(0, -1).Column
-    Set endCell = Cells(cell.row, endcol)
+    Set endCell = Intersect(cell.EntireRow, WS.[\c_durEND].Offset(0, -1).EntireColumn)
     Set startcell = Intersect(cell.EntireRow, WS.[\c_negStart].Offset(0, 1).EntireColumn)
     Set pcell = Intersect(cell.EntireRow, WS.[\c_perTIME].EntireColumn)
-    Set durCell = Cells(cell.row, WS.[\c_jobDur].Column)
+    Set durCell = Intersect(cell.EntireRow, WS.[\c_jobDur].EntireColumn)
     
     Set monthRan = WS.Range(startcell, endCell)
     
@@ -33,6 +31,7 @@ On Error GoTo ehandle
             If cell2.Value = "" Then cell2.Value = cell.Value
         Next
         pcell.Formula = "=AVERAGE(" + formRAN.Address(False, False) + ")"
+        cell.Select
     End If
 
 Exit Sub
@@ -48,10 +47,10 @@ On Error GoTo ehandle
     Dim fstart As Integer, fend As Integer
     Dim startDate As Date, endDate As Date
     
-    Set perCell = Cells(cell.row, Range("\c_perTIME").Column)
-    Set mRan = Cells(cell.row, Range("\c_durSTART").Column)
-    Set durCell = Cells(cell.row, Range("\c_jobDur").Column)
-    Set startcell = Cells(cell.row, Range("\c_jobStart").Column)
+    Set perCell = Intersect(cell.EntireRow, WS.[\c_perTIME].EntireColumn)
+    Set mRan = Intersect(cell.EntireRow, WS.[\c_durSTART].EntireColumn)
+    Set durCell = Intersect(cell.EntireRow, WS.[\c_jobDur].EntireColumn)
+    Set startcell = Intersect(cell.EntireRow, WS.[\c_jobStart].EntireColumn)
     
     startDate = Intersect(cell.EntireRow, WS.[\c_posStart].EntireColumn).Value
     endDate = Intersect(cell.EntireRow, WS.[\c_posEnd].EntireColumn).Value
@@ -59,20 +58,24 @@ On Error GoTo ehandle
     'added if statement for startcell.value to account for negative start month. Will need to added negative start month functionality at some point 2/19
     If startcell.Value < 0 Then
         fstart = startcell.Value
-    ElseIf startcell.Value > 0 And WS.[\negMin].Value = 0 Then
-        fstart = startcell.Value - 1
     Else
         fstart = startcell.Value - 1 'if there are neg columns subtract one bc we skip a "0" col
     End If
     
     fend = fstart + durCell.Value
     
-    If durCell.Value = "" Then
+    If durCell.Value = 0 Then
         Set GetFormulaRange = mRan.Offset(0, fstart)
     Else
         Set GetFormulaRange = WS.Range(mRan.Offset(0, fstart), mRan.Offset(0, fend - 1))
     End If
 
+    ' added to help prevent the over printing of percent cells 8/21
+    If Union(GetFormulaRange.Cells(1, GetFormulaRange.Cells.Count), WS.[\c_durEND].EntireColumn).Address = WS.[\c_durEND].EntireColumn.Address Then
+        Set GetFormulaRange = Nothing
+    ElseIf Union(GetFormulaRange.Cells(1, 1), WS.[\c_negStart].EntireColumn).Address = WS.[\c_negStart].EntireColumn.Address Then
+        Set GetFormulaRange = Nothing
+    End If
 Exit Function
 
 ehandle:
@@ -139,6 +142,8 @@ quickEND:
         End If
     End If
     
+    cell.Select
+    
 Exit Sub
     
 ehandle:
@@ -195,6 +200,8 @@ On Error GoTo ehandle
         UpdateFormulas perRan, WS, False
     End If
     
+    cell.Select
+    
 Exit Sub
     
 ehandle:
@@ -234,20 +241,32 @@ On Error GoTo ehandle
         temp = formRAN.Count - durCell.Value
         If InRange(originRan.Offset(0, -1), formRAN) Then
             durCell.Value = durCell.Value + temp
+            For Each cell2 In formRAN
+                If cell2.Value = "" Then cell2.Value = 0
+            Next
             smonthCell.Value = Intersect(WS.[\r_start].EntireRow, cell.EntireColumn).Value
-                CreateStart smonthCell, WS, True
+            CreateStart smonthCell, WS, True
         ElseIf InRange(originRan.Offset(0, 1), formRAN) Then
             durCell.Value = durCell.Value + temp
-                CreateFinish durCell, WS, True
+            For Each cell2 In formRAN
+                If cell2.Value = "" Then cell2.Value = 0
+            Next
+            CreateFinish durCell, WS, True
         End If
     ElseIf formRAN.Count < durCell.Value Then
         temp = durCell.Value - formRAN.Count
         If Union(formRAN, formRAN.Offset(0, -1)).Address = originRan.Address Then
             durCell.Value = durCell.Value - temp
             smonthCell.Value = Intersect(WS.[\r_start].EntireRow, formRAN(1).EntireColumn).Value
+            For Each cell2 In formRAN
+                If cell2.Value = "" Then cell2.Value = 0
+            Next
             CreateStart smonthCell, WS, True
         ElseIf Union(formRAN, formRAN.Offset(0, 1)).Address = originRan.Address Then
             durCell.Value = durCell.Value - temp
+            For Each cell2 In formRAN
+                If cell2.Value = "" Then cell2.Value = 0
+            Next
             CreateFinish durCell, WS, True
         End If
     End If

@@ -12,7 +12,7 @@ On Error GoTo ehandle
     
     EnS 0
     
-    insertGLOBAL ActiveCell, , "activecell"
+    insertGLOBAL activecell, , "activecell"
     Set buttonCls = Nothing
 
     EnS 1
@@ -30,7 +30,7 @@ Sub deletePERSON()
 On Error GoTo ehandle
 
     EnS 0
-    deleteGLOBAL ActiveCell
+    deleteGLOBAL activecell
     EnS 1
     Set buttonCls = Nothing
     
@@ -46,15 +46,15 @@ End Sub
 
 Sub deleteTRAILER()
 On Error GoTo e1
-
-    Dim WS As Worksheet
+    
+    Dim WS As Worksheet, tempWS As Worksheet
     Dim RAN As Range
     Dim tempRAN As Range, cell As Range, depDelete As Range
     Dim deleteRAN As Range
     Dim stuffCOLL As Collection
     
     Set WS = ActiveSheet
-    Set RAN = Intersect(ActiveCell.EntireRow, WS.[\c_group].EntireColumn)
+    Set RAN = Intersect(activecell.EntireRow, WS.[\c_group].EntireColumn)
     
     WS.Unprotect
     EnS 0
@@ -73,20 +73,24 @@ On Error GoTo e1
     Set deleteRAN = WS.Range(RAN, tempRAN).EntireRow
     
     For Each cell In stuffCOLL
+        Set tempWS = cell.Parent
+        tempWS.Unprotect
         Set depDelete = cell.Parent.Range(cell, cell.Offset(deleteRAN.Rows.Count - 1, 0))
         depDelete.EntireRow.Delete
+        basicPROTECT tempWS, True
     Next
     
     deleteRAN.Delete
 
     EnS 1
-    'basicPROTECT WS, True
+    basicPROTECT WS, True
+    
     
 Exit Sub
 e1:
     LogError "AddDeleteButton_support", "deleteTRAILER", Err.Description, Err
     EnS 1, , True
-    'basicPROTECT WS, True
+    basicPROTECT WS, True
     
 End Sub
 

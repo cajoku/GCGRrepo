@@ -13,7 +13,7 @@ On Error GoTo ehandle
         
     Set WS = masterOBJ.sdWS
     Set Target = boxRANGE(WS, "\c_Position", "\r_precon")
-    Set tableran = masterOBJ.wb.Worksheets("Code").[\staffTABLE]
+    Set tableran = masterOBJ.WB.Worksheets("Code").[\staffTABLE]
     
     Set listMENU = New listMENU_cls
     
@@ -37,7 +37,7 @@ On Error GoTo ehandle
         
     Set WS = masterOBJ.sdWS
     Set Target = boxRANGE(WS, "\c_Position", "\r_constr")
-    Set tableran = masterOBJ.wb.Worksheets("Code").[\staffTABLE]
+    Set tableran = masterOBJ.WB.Worksheets("Code").[\staffTABLE]
     
     Set listMENU = New listMENU_cls
     
@@ -64,7 +64,7 @@ On Error GoTo e1
     Set Target = boxRANGE(WS, "\r_trailer", "\c_desc", "\c_qt")
     trimRANGE Target, dsRIGHT
     
-    Set tableran = masterOBJ.wb.Worksheets("Code").[\trailerTABLE]
+    Set tableran = masterOBJ.WB.Worksheets("Code").[\trailerTABLE]
     
     Set listMENU = New listMENU_cls
     
@@ -88,7 +88,7 @@ Sub phase_listMENU_CLICK()
     Set WS = masterOBJ.sdWS
     Set Target = WS.Shapes(Application.Caller).TopLeftCell
     
-    Set tableran = masterOBJ.wb.Worksheets("Code").[\staffTABLE]
+    Set tableran = masterOBJ.WB.Worksheets("Code").[\staffTABLE]
     
     Set listMENU = New listMENU_cls
     
@@ -141,14 +141,16 @@ On Error GoTo e1
     Dim stuffCOLL As Collection
     
     Set WS = executetarget.Parent
+    WS.Unprotect
     
     EnS 0
     
     Set stuffCOLL = dependentCOLL(executetarget.Offset(-1, 0).Cells(1, 1))
-    WS.Unprotect
+    
     WS.[\r_temptrailer].EntireRow.Hidden = False
     
     For Each cell In stuffCOLL
+        cell.Parent.Unprotect
         i = resultCOLL.Count
         Do Until i = 0
             WS.[\r_temptrailer].EntireRow.Copy
@@ -176,11 +178,13 @@ On Error GoTo e1
             ''''''''''''''
         i = i - 1
         Loop
+        basicPROTECT cell.Parent, True
     Next
     
     WS.[\r_temptrailer].EntireRow.Hidden = True
     
-    'basicPROTECT WS, True
+    basicPROTECT WS, True
+    
     EnS 1
 
 Exit Sub

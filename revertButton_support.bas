@@ -8,7 +8,7 @@ On Error GoTo e1
     Dim RAN As Range
     Dim formSTR As String
     
-    Set RAN = ActiveCell
+    Set RAN = activecell
     Set WS = RAN.Parent
     
     WS.Unprotect
