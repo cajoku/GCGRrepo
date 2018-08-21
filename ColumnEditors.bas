@@ -79,7 +79,7 @@ On Error GoTo ehandle
         End If
         UpdateHeaders sht
     ElseIf dRan < dCOLL.Count Then
-            sht.Range(endcol.Offset(0, -diff + 1), endcol.Offset(0, -1)).EntireColumn.Delete
+            sht.Range(endcol.Offset(0, -diff), endcol.Offset(0, -1)).EntireColumn.Delete
         Set newCol = sht.[\c_monthDETAIL].EntireColumn
         If newCol.Hidden = True Then
             If Not sht.Shapes("\\moreMONTHdetail").Visible = msoTrue Then
@@ -144,7 +144,7 @@ On Error GoTo ehandle
 
     If negRan.Offset(0, 1).Address <> dsRan.Address Then
         Set headRAN = boxRANGE(sht, "\c_negStart", "\r_start", "\c_durSTART", "\r_start")
-        trimRANGE headRAN, dsSIDES
+        trimRANGE headRAN, dssides
     Else
         Set headRAN = sht.[\c_negStart]
     End If
@@ -205,7 +205,7 @@ On Error GoTo ehandle
         UpdateNegHeaders sht
     ElseIf Abs(sMonth) < negs.Count Then
         j = Abs(negs.Count - sMonth)
-            sht.Range(negCol.Offset(0, 1), negCol.Offset(0, j - 1)).Delete
+            sht.Range(negCol.Offset(0, 1), negCol.Offset(0, j)).Delete
         UpdateNegHeaders sht
     End If
     
@@ -222,7 +222,7 @@ On Error GoTo ehandle
     Dim i As Integer, j As Integer
     
     Set headRAN = boxRANGE(sht, "\c_negStart", "\r_start", "\c_durSTART", "\r_start")
-    trimRANGE headRAN, dsSIDES
+    trimRANGE headRAN, dssides
     
     If Not headRAN Is Nothing Then
         j = headRAN.Count
@@ -249,7 +249,7 @@ On Error GoTo ehandle
     Dim lastRAN As Range, lastFORM As String
 
     Set headRAN = boxRANGE(sht, "\c_negStart", "\r_start", "\c_durSTART", "\r_start")
-    trimRANGE headRAN, dsSIDES
+    trimRANGE headRAN, dssides
     Set negCol = sht.Range("\c_negStart").EntireColumn
     'Set negEnd = sht.Range("\c_negEnd").EntireColumn
     

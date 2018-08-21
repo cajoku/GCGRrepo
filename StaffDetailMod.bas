@@ -43,9 +43,9 @@ On Error GoTo e1
                 Set staffEnd = Intersect(tempRAN.EntireRow, WS.[\c_posEnd].EntireColumn)
                 Set sMonth = Intersect(tempRAN.EntireRow, WS.[\c_jobStart].EntireColumn)
                 Set durRan = Intersect(tempRAN.EntireRow, WS.[\c_jobDur].EntireColumn)
-                percentRan.Value = 1
-                staffStart.Formula = "=" & Intersect(sdWSran.EntireRow, WS.[\c_posStart].EntireColumn).Address
-                staffEnd.Formula = "=" & Intersect(sdWSran.EntireRow, WS.[\c_posEnd].EntireColumn).Address
+                percentRan.Value = 0
+                staffStart.Formula = "=IFERROR(" & Intersect(sdWSran.EntireRow, WS.[\c_posStart].EntireColumn).Address & ","""")"
+                staffEnd.Formula = "=IFERROR(" & Intersect(sdWSran.EntireRow, WS.[\c_posEnd].EntireColumn).Address & ","""")"
                 If IsDate(staffStart.Value) And IsDate(staffEnd.Value) Then
                     durRan.Value = cDateDiff("m", staffStart.Value, staffEnd.Value)
                     If Intersect(sdWSran.EntireRow, WS.[\c_posStart].EntireColumn).Value < WS.[\cstart].Value Then

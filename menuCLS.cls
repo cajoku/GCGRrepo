@@ -12,8 +12,8 @@ Option Explicit
 Private anchorRAN As Range
 Private WithEvents WS As Worksheet
 Attribute WS.VB_VarHelpID = -1
-Private WithEvents wb As Workbook
-Attribute wb.VB_VarHelpID = -1
+Private WithEvents WB As Workbook
+Attribute WB.VB_VarHelpID = -1
 Private mainSHP As Shape
 Private xSHP As Shape
 Private titleSHP As Shape
@@ -301,7 +301,7 @@ On Error GoTo e1
     
     i = CInt(Right(Application.Caller, 1))
     
-    ActiveCell.Formula = myARR(i, 2)
+    activecell.Formula = myARR(i, 2)
 
 Exit Sub
 e1:
@@ -314,12 +314,12 @@ Private Sub Class_Initialize()
 On Error GoTo e1
 
     Set WS = ActiveSheet
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
     'WS.Unprotect
     '<navarro
     '<4-18-18
-    Hmain = ActiveCell.RowHeight
+    Hmain = activecell.RowHeight
     Wmain = Hmain
     'navarro>
     '4-18-18>

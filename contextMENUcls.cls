@@ -63,7 +63,7 @@ On Error GoTo e1
     masterSHP.Left = lMargin
     align_Burger2Line
     Set activeMenu = Me
-    Set activeROW = ActiveCell.EntireRow
+    Set activeROW = activecell.EntireRow
     
 Exit Sub
 e1:
@@ -654,8 +654,8 @@ On Error GoTo e1
         lastRAN.EntireRow.RowHeight = lastROWh
     End If
         
-    If Union(ActiveCell, docRAN).Address = docRAN.Address Then
-        Set tempROW = ActiveCell.EntireRow
+    If Union(activecell, docRAN).Address = docRAN.Address Then
+        Set tempROW = activecell.EntireRow
         Set insertRAN = tempROW
         'record for reset
         lastROWh = tempROW.RowHeight
@@ -709,12 +709,12 @@ On Error GoTo e1
     trimRANGE xferRAN, dsupdown
     If xferRAN Is Nothing Then Set xferRAN = WS.[xx1000] 'not nothing
     
-    If Union(ActiveCell, documentRAN.EntireRow).Address = documentRAN.EntireRow.Address Then
+    If Union(activecell, documentRAN.EntireRow).Address = documentRAN.EntireRow.Address Then
         dockBTNS
-        anchor ActiveCell
-    ElseIf Union(ActiveCell, xferRAN.EntireRow).Address = xferRAN.EntireRow.Address Then
+        anchor activecell
+    ElseIf Union(activecell, xferRAN.EntireRow).Address = xferRAN.EntireRow.Address Then
         dockBTNS
-        anchor ActiveCell
+        anchor activecell
     Else
         dockMAIN
     End If

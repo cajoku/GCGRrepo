@@ -101,7 +101,8 @@ On Error GoTo e1
     
     
     Set WS = ActiveSheet
-    Set RAN = Intersect(ActiveCell.EntireRow, WS.[\c_Position].EntireColumn)
+    WS.Unprotect
+    Set RAN = Intersect(activecell.EntireRow, WS.[\c_Position].EntireColumn)
     
     EnS 0
     
@@ -124,6 +125,7 @@ On Error GoTo e1
         'basicPROTECT cell.Parent, True
     Next
     
+    basicPROTECT WS, True
     EnS 1
     
 Exit Sub
@@ -167,11 +169,11 @@ Sub registerPHASE(RAN As Range)
 '            If cell.Formula <> Intersect(RAN.EntireColumn, tempRAN).Formula Then
 '                cell.Formula = Intersect(RAN.EntireColumn, tempRAN).Formula
 '            End If
-            If cell.Formula = "=" & RAN.Address(True, True) Then
+            If cell.Formula = "=IFERROR(" & RAN.Address(True, True) & ","""")" Then
                 EnS 1
                 cell.Value = RAN.Value
                 EnS 0
-                cell.Formula = "=" & RAN.Address(True, True)
+                cell.Formula = "=IFERROR(" & RAN.Address(True, True) & ","""")"
             End If
         Next
     End If

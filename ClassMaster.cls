@@ -18,8 +18,8 @@ Public WithEvents gcoWS As Worksheet
 Attribute gcoWS.VB_VarHelpID = -1
 Public WithEvents WS As Worksheet
 Attribute WS.VB_VarHelpID = -1
-Public WithEvents wb As Workbook
-Attribute wb.VB_VarHelpID = -1
+Public WithEvents WB As Workbook
+Attribute WB.VB_VarHelpID = -1
 Public WithEvents gcdWS As Worksheet
 Attribute gcdWS.VB_VarHelpID = -1
 Public WithEvents groWS As Worksheet
@@ -27,6 +27,7 @@ Attribute groWS.VB_VarHelpID = -1
 Public WithEvents schedWS As Worksheet
 Attribute schedWS.VB_VarHelpID = -1
 Public WithEvents gantWS As Worksheet
+Attribute gantWS.VB_VarHelpID = -1
 Private cStartRan As Range, cEndRan As Range, perRan As Range, durRan As Range, jstartRan As Range, jendRan As Range, pStartRan As Range, pEndRan As Range
 Private durCol As Range, perCol As Range, perCOL2 As Range, dendCOL As Range, jobCOL As Range, jobCOL2 As Range, jobDUR As Range, jobDUR2 As Range
 Private hROW As Range, eROW As Range
@@ -44,15 +45,15 @@ On Error GoTo ehandle
     Dim cmenu As contextMENUcls '<navarro 4/11/18>
     Dim carrymenu As carryMENUcls '<navarro 4-18-18>
     
-    Set wb = masterWB
-    Set WS = wb.Worksheets("Settings")
-    Set sdWS = wb.Worksheets("Staff Detail")
-    Set gcdWS = wb.Worksheets("GCs Detail")
-    Set grdWS = wb.Worksheets("GRs Detail")
-    Set gcoWS = wb.Worksheets("GCs Owner")
-    Set groWS = wb.Worksheets("GRs Owner")
-    Set schedWS = wb.Worksheets("Non-Staff Labor")
-    Set gantWS = wb.Worksheets("Labor Gantt")
+    Set WB = masterWB
+    Set WS = WB.Worksheets("Settings")
+    Set sdWS = WB.Worksheets("Staff Detail")
+    Set gcdWS = WB.Worksheets("GCs Detail")
+    Set grdWS = WB.Worksheets("GRs Detail")
+    Set gcoWS = WB.Worksheets("GCs Owner")
+    Set groWS = WB.Worksheets("GRs Owner")
+    Set schedWS = WB.Worksheets("Non-Staff Labor")
+    Set gantWS = WB.Worksheets("Labor Gantt")
     
     '<navarro
     '<4-11-18
@@ -97,7 +98,7 @@ On Error GoTo e1
     
     Exit Sub
 e1:
-    LogError wb.Name, "Workbook_BeforeClose", "Error With Closing WB", Err
+    LogError WB.Name, "Workbook_BeforeClose", "Error With Closing WB", Err
 End Sub
 
 
@@ -126,18 +127,13 @@ On Error GoTo ehandle
     
     If Union(Target, startRAN).Address = startRAN.Address Then
         If IsDate(Target.Value) Then
-            'sdWS.Activate
             sdWS.Range("\cstart").Formula = "=" & WS.Name & "!" & startRAN.Address(False, False)
-            'WS.Activate
         Else
             If Target.Address = lastRAN.Address And Target.Value <> 0 Then Target.Formula = lastFORM
         End If
     ElseIf Union(Target, endRAN).Address = endRAN.Address Then
-        'If startRAN.Value = 0 Then GoTo quickout
-        If IsDate(Target.Value) Then
-            'sdWS.Activate
+        If IsDate(Target.Value) And Target.Value > startRAN.Value Then
             sdWS.Range("\cend").Formula = "=" & WS.Name & "!" & endRAN.Address(False, False)
-            'WS.Activate
         Else
             If Target.Address = lastRAN.Address And Target.Value <> 0 Then Target.Formula = lastFORM
         End If
@@ -167,24 +163,13 @@ On Error GoTo ehandle
     
     If Union(Target, preStart).Address = preStart.Address Then
         If IsDate(Target.Value) Then
-            'sdWS.Activate
             sdWS.[\pstart].Formula = "=" & WS.Name & "!" & preStart.Address(False, False)
-            'WS.Activate
         Else
             If Target.Address = lastRAN.Address And Target.Value <> 0 Then Target.Formula = lastFORM
         End If
     ElseIf Union(Target, preEnd).Address = preEnd.Address Then
-'        If IsDate(Target.Value) And startRAN.Value = 0 Then
-'            startRAN.Value = Target.Value
-'            EnS 0
-'            sdWS.[\cstart].Formula = "=" & WS.Name & "!" & startRAN.Address(False, False)
-'            EnS 1
-'        End If
-'        If preStart.Value = 0 Then GoTo quickout
-        If IsDate(Target.Value) Then
-            'sdWS.Activate
+        If IsDate(Target.Value) And Target.Value > preStart.Value Then
             sdWS.[\pend].Formula = "=" & WS.Name & "!" & preEnd.Address(False, False)
-            'WS.Activate
         Else
             If Target.Address = lastRAN.Address And Target.Value <> 0 Then Target.Formula = lastFORM
         End If
@@ -233,7 +218,7 @@ On Error GoTo ehandle
         Next
     End If
     
-    ActiveCell.Select
+    'sdWS.[A1].Select
     Application.DisplayAlerts = True
 quickout:
     EnS 1, , True
@@ -247,7 +232,7 @@ End Sub
 Private Sub WS_SelectionChange(ByVal Target As Range)
 On Error GoTo ehandle
 
-    Set lastRAN = ActiveCell
+    Set lastRAN = activecell
     lastFORM = lastRAN.Formula
     
 Exit Sub
@@ -352,20 +337,17 @@ On Error GoTo ehandle
                 Target.Formula = "=" & "Settings!" & WS.Range(Mid(Target.Name.Name, 16)).Address(False, False)
                 'to catch gap btwn constart & preconend
                 If Target.Address = cStartRan.Address Then ' And pEndRan.Value = 0 Then
-                    'pEndRan.Value = cStartRan.Value
                     WS.Range(Mid(pEndRan.Name.Name, 16)) = Target.Value
                     DurColumnCount sdWS.Range("\duration").Value, sdWS
                     Application.Calculate
                     NegColCount sdWS.[\pDur].Value, sdWS
                     If durRan.Value <> 0 Then newGant.NumberColumns durRan.Offset(1, 0).Value: NumberSchedRows durRan.Offset(1, 0).Value
-                'ElseIf pEndRan.Value <> 0 And cStartRan.Value <> pEndRan.Value Then
-                    'MsgBox "Cannot Allow Gap Between PreCon End and Construction Start", vbExclamation, "Error - Columns Not Updated"
-                    'lastRAN.Formula = lastFORM
-                    'Target.Formula = "=" & "Settings!" & WS.Range(Mid(lastRAN.Name.Name, 10)).Address(False, False)
-                Else
+                ElseIf Target.Address = cEndRan.Address And cEndRan.Value > cStartRan.Value Then
                     DurColumnCount sdWS.Range("\duration").Value, sdWS
                     Application.Calculate
                     If durRan.Value <> 0 Then newGant.NumberColumns durRan.Offset(1, 0).Value: NumberSchedRows durRan.Offset(1, 0).Value
+                Else
+                    If Target.Address = lastRAN.Address Then Target.Formula = lastFORM
                 End If
             Else
                 If Target.Address = lastRAN.Address Then
@@ -382,7 +364,7 @@ On Error GoTo ehandle
                     ReCalcDur Target.Value, WS.Range(Mid(Target.Name.Name, 16)), WS, True
                     Target.Formula = "=" & "Settings!" & WS.Range(Mid(Target.Name.Name, 16)).Address(False, False)
                     DurColumnCount Target.Value, sdWS
-                    Application.Calculate: NumberSchedRows Target.Offset(1, 0).Value
+                    Application.Calculate: NumberSchedRows Target.Offset(1, 0).Value: newGant.NumberColumns Target.Offset(1, 0).Value
                 End If
             Else
                 If Target.Address = lastRAN.Address Then Target.Formula = lastFORM
@@ -395,7 +377,7 @@ On Error GoTo ehandle
                     Application.Calculate
                     Target.Formula = "=" & "Settings!" & WS.Range(Mid(Target.Name.Name, 16)).Address(False, False)
                     DurColumnCount sdWS.Range("\duration").Value, sdWS
-                    Application.Calculate: NumberSchedRows durRan.Offset(1, 0).Value
+                    Application.Calculate: NumberSchedRows Target.Value: newGant.NumberColumns Target.Value
                 End If
             Else
                 If Target.Address = lastRAN.Address Then Target.Formula = lastFORM
@@ -406,16 +388,11 @@ On Error GoTo ehandle
                 If pStartRan.Value <> 0 Then Application.Calculate
                 Target.Formula = "=" & "Settings!" & WS.Range(Mid(Target.Name.Name, 16)).Address(False, False)
                 ' added to prevent gaps between preCon End and cStart
-                If Target.Address = pEndRan.Address Then 'And cStartRan.Value = 0 Then
-                    'cStartRan.Value = pEndRan.Value
+                If Target.Address = pEndRan.Address And pEndRan.Value > pStartRan.Value Then 'And cStartRan.Value = 0 Then
                     WS.Range(Mid(cStartRan.Name.Name, 16)) = Target.Value
                     NegColCount sdWS.[\pDur].Value, sdWS
                     Application.Calculate
                     DurColumnCount sdWS.Range("\duration").Value, sdWS
-'                ElseIf cStartRan.Value <> 0 And pEndRan.Value <> cStartRan.Value Then
-'                    MsgBox "Cannot Allow Gap Between PreCon End and Construction Start", vbExclamation, "Error - Columns Not Updated"
-'                    lastRAN.Formula = lastFORM
-                    'Target.Formula = "=" & "Settings!" & WS.Range(Mid(lastRAN.Name.Name, 10)).Address(False, False)
                 Else
                     NegColCount sdWS.[\pDur], sdWS  'added for negcol precon feature 3/7
                 End If
@@ -642,7 +619,7 @@ On Error Resume Next
     
     Set buttonCls = Nothing
     Set gantCls = Nothing
-    Set lastRAN = ActiveCell
+    Set lastRAN = activecell
     lastFORM = lastRAN.Formula
     
     Set revertButtoncls = Nothing
@@ -762,6 +739,7 @@ On Error GoTo e1
     
     If Target.Cells.Count = 1 Then
         If Union(Target, phaseRAN).Address = phaseRAN.Address Then
+            gantWS.Unprotect
             phaseName = Target.Value
             defaultName = "Add Phase Here:"
             EnS 0
@@ -778,6 +756,7 @@ On Error GoTo e1
                 tempPhase.Hidden = True
                 newGant.createBar Target.Offset(-1, 0)
             End If
+            basicPROTECT gantWS, True
             EnS 1
         End If
     End If
@@ -888,22 +867,24 @@ On Error GoTo e1
     
     Set buttonCls = Nothing
 
-    For Each cell In Target.Cells
-    
-        If Not descRAN Is Nothing Then
-            If Union(cell, descRAN).Address = descRAN.Address Then
-                Set buttonCls = New AddDeleteButton
-                buttonCls.setGanttAnchor cell
-            End If
-        End If
+    If Target.Cells.Count = 1 Then
+        For Each cell In Target.Cells
         
-        If Union(cell, gantWS.[\gid].EntireRow).Address = gantWS.[\gid].EntireRow.Address Then
-            recordState cell
-        Else
-            nullState
-        End If
-    
-    Next
+            If Not descRAN Is Nothing Then
+                If Union(cell, descRAN).Address = descRAN.Address Then
+                    Set buttonCls = New AddDeleteButton
+                    buttonCls.setGanttAnchor cell
+                End If
+            End If
+            
+            If Union(cell, gantWS.[\gid].EntireRow).Address = gantWS.[\gid].EntireRow.Address Then
+                recordState cell
+            Else
+                nullState
+            End If
+        
+        Next
+    End If
     
     Exit Sub
 e1:
@@ -978,31 +959,31 @@ Private Sub gcdWS_SelectionChange(ByVal Target As Range)
     Set buttonCls = Nothing
     Set menuSHP = Nothing
     
-    Set lastRAN = ActiveCell
+    Set lastRAN = activecell
     lastFORM = lastRAN.Formula
     
     '<navarro
-    If Union(ActiveCell, qtCOL).Address = qtCOL.Address And Intersect(ActiveCell.EntireRow, groupCOL).Value = 1 Then
+    If Union(activecell, qtCOL).Address = qtCOL.Address And Intersect(activecell.EntireRow, groupCOL).Value = 1 Then
         Set menuSHP = New menuCLS
         arr = menuSHP.createARRAY
-        menuSHP.setANCHOR ActiveCell, arr
-    ElseIf Union(ActiveCell, descCOL).Address = descCOL.Address And Intersect(ActiveCell.EntireRow, groupCOL).Value = 1 Then 'IsNumeric(Intersect(ActiveCell.EntireRow, groupCOL).Value) Then
+        menuSHP.setANCHOR activecell, arr
+    ElseIf Union(activecell, descCOL).Address = descCOL.Address And Intersect(activecell.EntireRow, groupCOL).Value = 1 Then 'IsNumeric(Intersect(ActiveCell.EntireRow, groupCOL).Value) Then
         If Not trailerRAN Is Nothing Then
-            If Union(ActiveCell, trailerRAN).Address <> trailerRAN.Address Then
+            If Union(activecell, trailerRAN).Address <> trailerRAN.Address Then
                 Set buttonCls = New AddDeleteButton
-                buttonCls.setDETAILANCHOR ActiveCell.Offset(0, 1)
+                buttonCls.setDETAILANCHOR activecell.Offset(0, 1)
             End If
         Else
             Set buttonCls = New AddDeleteButton
-            buttonCls.setDETAILANCHOR ActiveCell.Offset(0, 1)
+            buttonCls.setDETAILANCHOR activecell.Offset(0, 1)
         End If
-    ElseIf Union(ActiveCell, regionCOL).Address = regionCOL.Address Then
+    ElseIf Union(activecell, regionCOL).Address = regionCOL.Address Then
         Set frm = New arrayFORM
-        frm.register masterOBJ.WS.[regions], ActiveCell
+        frm.register masterOBJ.WS.[regions], activecell
         frm.Show
-    ElseIf Union(ActiveCell, sectorCOL).Address = sectorCOL.Address Then
+    ElseIf Union(activecell, sectorCOL).Address = sectorCOL.Address Then
         Set frm = New arrayFORM
-        frm.register masterOBJ.WS.[sectors], ActiveCell
+        frm.register masterOBJ.WS.[sectors], activecell
         frm.Show
     End If
     'navarro>
@@ -1089,24 +1070,24 @@ On Error GoTo ehandle
     Set menuSHP = Nothing
     Set buttonCls = Nothing
     
-    Set lastRAN = ActiveCell
+    Set lastRAN = activecell
     lastFORM = lastRAN.Formula
     
     '<navarro
-    If Union(ActiveCell, qtCOL).Address = qtCOL.Address And Intersect(ActiveCell.EntireRow, groupCOL).Value = 1 Then
+    If Union(activecell, qtCOL).Address = qtCOL.Address And Intersect(activecell.EntireRow, groupCOL).Value = 1 Then
         Set menuSHP = New menuCLS
         arr = menuSHP.createARRAY
-        menuSHP.setANCHOR ActiveCell, arr
-    ElseIf Union(ActiveCell, descCOL).Address = descCOL.Address And Intersect(ActiveCell.EntireRow, groupCOL).Value = 1 Then
+        menuSHP.setANCHOR activecell, arr
+    ElseIf Union(activecell, descCOL).Address = descCOL.Address And Intersect(activecell.EntireRow, groupCOL).Value = 1 Then
         Set buttonCls = New AddDeleteButton
-        buttonCls.setDETAILANCHOR ActiveCell.Offset(0, 1)
-    ElseIf Union(ActiveCell, regionCOL).Address = regionCOL.Address Then
+        buttonCls.setDETAILANCHOR activecell.Offset(0, 1)
+    ElseIf Union(activecell, regionCOL).Address = regionCOL.Address Then
         Set frm = New arrayFORM
-        frm.register masterOBJ.WS.[regions], ActiveCell
+        frm.register masterOBJ.WS.[regions], activecell
         frm.Show
-    ElseIf Union(ActiveCell, sectorCOL).Address = sectorCOL.Address Then
+    ElseIf Union(activecell, sectorCOL).Address = sectorCOL.Address Then
         Set frm = New arrayFORM
-        frm.register masterOBJ.WS.[sectors], ActiveCell
+        frm.register masterOBJ.WS.[sectors], activecell
         frm.Show
     End If
 

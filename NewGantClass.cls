@@ -380,9 +380,11 @@ On Error GoTo e1
     trimRANGE countRAN, dsRIGHT
     Set tempRAN = WS.[\c_gtemp]
     Set deleteRAN = lastCol.Offset(0, -1)
+    
+    If weeks = 0 Then Exit Sub
+    
+    WS.Unprotect
     EnS 0
-    
-    
     
     'firstCol.EntireRow.ClearContents
     'Range(firstCol, firstCol.End(xlToRight)).ClearContents
@@ -414,11 +416,13 @@ On Error GoTo e1
     End If
     Application.CutCopyMode = False
 
+    basicPROTECT WS, True
     EnS 1
     
     Exit Sub
 e1:
     LogError "NewGantClass", "NumberColumns", Err.Description, Err
+    basicPROTECT WS, True
     EnS 1, , True
 End Sub
 
@@ -438,42 +442,10 @@ On Error GoTo e1
 
     If Not isMasterGantt Then registerGanttWS masterOBJ.gantWS, masterOBJ.gantWS.[\c_gstart], masterOBJ.gantWS.[\c_gdur], masterOBJ.gantWS.[\c_t0]
     'Set barColl = New Collection
-    Set staffWS = masterOBJ.sdWS
-    'If masterOBJ.gantWS.Visible <> xlVisible Then If staffWS.[\duration].Value <> 0 Then masterOBJ.gantWS.Visible = xlSheetVisible
 
     Exit Sub
 e1:
     LogError "NewGantClass", "Class_Initialize", Err.Description, Err
-End Sub
-
-
-Private Sub Class_Terminate()
-    'isMasterGantt = False
-End Sub
-
-
-Private Sub staffWS_Change(ByVal Target As Range)
-On Error GoTo e1
-
-    Dim conDUR As Range
-    Dim conDUR2 As Range
-    Dim conStart As Range
-    Dim conEnd As Range
-    
-    Set conDUR = staffWS.[\wdur]
-    Set conDUR2 = staffWS.[\duration]
-    Set conStart = staffWS.[\cstart]
-    Set conEnd = staffWS.[\cend]
-    
-    If Union(Target, conDUR).Address = conDUR.Address Then
-        If conDUR.Value <> 0 Then NumberColumns conDUR.Value
-    ElseIf Union(Target, conDUR2).Address = conDUR2.Address Then
-        If conDUR2.Value <> 0 Then Application.Calculate: NumberColumns conDUR.Value
-    End If
-    
-    Exit Sub
-e1:
-    LogError "NewGantClass", "staffWS_Change", Err.Description, Err
 End Sub
 
 
@@ -497,39 +469,6 @@ On Error GoTo e1
 e1:
 
 End Sub
-
-'Private Sub WS_Calculate()
-'On Error GoTo e1
-'
-'    Dim cell As Range
-'    Dim gcls As Variant
-'
-'
-'    If Not isMasterGantt Then Exit Sub
-'
-'    On Error GoTo e2
-'    If barColl.Count <= 0 Then Exit Sub
-'
-'    On Error GoTo e1
-'    sOff
-'
-'    'For Each gcls In barColl
-'        'gcls.updateBar
-'    'Next
-'    Me.updateBar
-'
-'    sOn
-'
-'
-'    Exit Sub
-'e1:
-'    'Debug.Print "error from ws_calc"
-'    Exit Sub
-'e2:
-'    registerBars
-'    Resume Next
-    
-'End Sub
 
 
 Private Sub WS_Change(ByVal Target As Range)

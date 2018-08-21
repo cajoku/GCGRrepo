@@ -80,7 +80,7 @@ On Error GoTo e1
     
     
     Set activeMenu = Me
-    Set activeROW = ActiveCell.EntireRow
+    Set activeROW = activecell.EntireRow
     
     If isCARRYrow(RAN) Then
         burgerSHP.Visible = True
@@ -185,7 +185,7 @@ On Error GoTo e1
         Case "\m\burger"
             assembleMENU
         Case "\m\x"
-            anchor ActiveCell
+            anchor activecell
         Case "\c\minus_\"
             removeCARRY
             SYNCrequired True
@@ -609,7 +609,7 @@ On Error GoTo e1
     Dim showRAN As Range
     Dim boo1 As Boolean, boo2 As Boolean
     
-    Set RAN = Intersect(ActiveCell.EntireRow, contextCOL)
+    Set RAN = Intersect(activecell.EntireRow, contextCOL)
     
     Set contextCOL = myWS.[\c_context].EntireColumn
     Set carryCOL = myWS.[\c_carry].EntireColumn

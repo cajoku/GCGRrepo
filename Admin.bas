@@ -154,11 +154,11 @@ Sub shapeDir()
 
     Dim shp As Shape
     Dim sht As Worksheet
-    Dim wb As Workbook
+    Dim WB As Workbook
     
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
-    For Each sht In wb.Worksheets
+    For Each sht In WB.Worksheets
         If sht.Visible = xlSheetVisible Then
             For Each shp In sht.Shapes
                 If Left(shp.Name, 1) = "\" Then Debug.Print sht.Name & " - " & shp.Name & " - " & shp.OnAction
@@ -172,12 +172,12 @@ Sub UDFDir()
 
 
     Dim sht As Worksheet
-    Dim wb As Workbook
+    Dim WB As Workbook
     Dim cell As Range
     
-    Set wb = ActiveWorkbook
+    Set WB = ActiveWorkbook
     
-    For Each sht In wb.Worksheets
+    For Each sht In WB.Worksheets
         If sht.Visible = xlSheetVisible Then
             sht.Unprotect
             For Each cell In sht.UsedRange
@@ -269,12 +269,12 @@ Function FolderExists(ByVal Path As String) As Boolean
 End Function
 
 
-Sub clearError(wb As Workbook)
+Sub clearError(WB As Workbook)
 
     Dim WS As Worksheet
     Dim printRAN As Range
     
-    Set WS = wb.Worksheets("Errors")
+    Set WS = WB.Worksheets("Errors")
     Set printRAN = WS.[\errors]
     
     printRAN.Value = ""

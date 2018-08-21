@@ -262,7 +262,6 @@ On Error GoTo e1
     Set insertRAN = RAN.Offset(insertOSET, 0)
     
     WS.Unprotect
-    'gcoWS.Unprotect
     
     If templateNM = "" Then
         If TRUEcolFALSErow Then
@@ -272,7 +271,7 @@ On Error GoTo e1
         End If
     ElseIf LCase(templateNM) = "activecell" Then
         WS.Activate
-        Set tempRAN = ActiveCell
+        Set tempRAN = activecell
     End If
     
     If Left(templateNM, 2) = "\c" Then
@@ -306,6 +305,7 @@ On Error GoTo e1
         Set ranColl = dependentCOLL(RAN)
         For Each cell In ranColl
             With cell
+                .Parent.Unprotect
                 .EntireRow.Copy
                 .Offset(1, 0).EntireRow.Insert
                 If .Parent.Name = masterOBJ.gantWS.Name Then
@@ -316,21 +316,19 @@ On Error GoTo e1
                     Next
                     newGant.createBar .Offset(1, 0)
                 End If
+                basicPROTECT .Parent, True
             End With
         Next
     End If
 
     Application.CutCopyMode = False
     basicPROTECT WS, True
-    'basicPROTECT gcoWS, True
-    'basicPROTECT masterOBJ.groWS, True
+
     
 Exit Sub
 e1:
     LogError "ToolKit", "insertGLOBAL", Err.Description, Err
     basicPROTECT WS, True
-    'basicPROTECT gcoWS, True
-    'basicPROTECT masterOBJ.groWS, True
     
 End Sub
 
@@ -345,14 +343,13 @@ On Error GoTo e1
     Dim insertRAN As Range
     
     Set WS = RAN.Parent
-    Set gcoWS = masterWB.Worksheets("GCs Owner")
     
     WS.Unprotect
-    'gcoWS.Unprotect
     
     If TRUEcolFALSErow Then
         Set ranColl = dependentCOLL(RAN)
         For Each cell In ranColl
+            
             cell.EntireColumn.Delete
         Next
         RAN.EntireColumn.Delete
@@ -365,14 +362,12 @@ On Error GoTo e1
     End If
 
     basicPROTECT WS, True
-    'basicPROTECT gcoWS, True
     
 Exit Sub
 e1:
     LogError "ToolKit", "deleteGLOBAL", Err.Description, Err
     basicPROTECT WS, True
-    'basicPROTECT gcoWS, True
-    
+
 End Sub
 
 
@@ -394,9 +389,9 @@ On Error GoTo e1
         Do
             On Error GoTo quickout
             .NavigateArrow False, 1, i
-            Set t2ran = ActiveCell
+            Set t2ran = activecell
             If t2ran.Parent.Name & t2ran.Address <> RAN.Parent.Name & RAN.Address Then
-                tcoll.Add ActiveCell
+                tcoll.Add activecell
             Else
                 GoTo quickout
             End If

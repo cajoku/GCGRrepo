@@ -26,13 +26,13 @@ dsPROTECT masterWB
 
 End Sub
 
-Sub dsPROTECT(wb As Workbook)
+Sub dsPROTECT(WB As Workbook)
 On Error GoTo ehandle01
     
     Dim sht As Worksheet
     Dim tSTR As String
     
-    For Each sht In wb.Sheets
+    For Each sht In WB.Sheets
         If sht.Visible <> xlSheetVeryHidden Then
             If sht.CodeName = "Sheet3" Then
                 strictPROTECT sht, True
@@ -62,11 +62,11 @@ Sub basicPROTECT(sht As Worksheet, TurnOn As Boolean)
             AllowFormattingCells:=True, _
             AllowFormattingColumns:=True, _
             AllowFormattingRows:=True, _
-            AllowInsertingColumns:=True, _
-            AllowInsertingRows:=True, _
+            AllowInsertingColumns:=False, _
+            AllowInsertingRows:=False, _
             AllowInsertingHyperlinks:=True, _
-            AllowDeletingColumns:=True, _
-            AllowDeletingRows:=True, _
+            AllowDeletingColumns:=False, _
+            AllowDeletingRows:=False, _
             AllowSorting:=True, _
             AllowFiltering:=True, _
             AllowUsingPivotTables:=True
