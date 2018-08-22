@@ -28,6 +28,9 @@ Public WithEvents schedWS As Worksheet
 Attribute schedWS.VB_VarHelpID = -1
 Public WithEvents gantWS As Worksheet
 Attribute gantWS.VB_VarHelpID = -1
+Public WithEvents rateWS As Worksheet
+Attribute rateWS.VB_VarHelpID = -1
+
 Private cStartRan As Range, cEndRan As Range, perRan As Range, durRan As Range, jstartRan As Range, jendRan As Range, pStartRan As Range, pEndRan As Range
 Private durCol As Range, perCol As Range, perCOL2 As Range, dendCOL As Range, jobCOL As Range, jobCOL2 As Range, jobDUR As Range, jobDUR2 As Range
 Private hROW As Range, eROW As Range
@@ -54,6 +57,7 @@ On Error GoTo ehandle
     Set groWS = WB.Worksheets("GRs Owner")
     Set schedWS = WB.Worksheets("Non-Staff Labor")
     Set gantWS = WB.Worksheets("Labor Gantt")
+    Set rateWS = WB.Worksheets("Rate Tables")
     
     '<navarro
     '<4-11-18
@@ -890,6 +894,82 @@ On Error GoTo e1
 e1:
     LogError "ClassMaster", "gantWS_SelectionChange", Err.Description, Err
 
+End Sub
+
+Private Sub rateWS_Change(ByVal Target As Range)
+On Error GoTo e1
+
+    Dim RTran As Range, OTran As Range, cell As Range
+    
+    Set RTran = rateWS.[\c_RT].EntireColumn
+    Set OTran = rateWS.[\c_OT].EntireColumn
+    
+    
+    For Each cell In Target.Cells
+        If Union(Target, RTran).Address = RTran.Address Then
+            If IsDate(cell.Offset(0, -1).Value) Then
+                If lastFORM <> cell.Formula Then
+                    With cell
+                        If Not .Comment Is Nothing Then .Comment.Delete
+                        .ClearComments
+                        .AddComment lastFORM
+                        .Comment.Shape.Fill.ForeColor.RGB = RGB(0, 0, 102)
+                        .Comment.Shape.TextFrame.Characters.Font.ColorIndex = 2
+                        .Comment.Shape.TextFrame.Characters.Font.Bold = True
+                        .Font.Bold = True
+                        .Font.Italic = True
+                        .Font.Color = RGB(250, 1, 1)
+                    End With
+                End If
+            End If
+        ElseIf Union(Target, OTran).Address = OTran.Address Then
+            If IsDate(cell.Offset(0, -2).Value) Then
+                If lastFORM <> cell.Formula Then
+                    With cell
+                        If Not .Comment Is Nothing Then .Comment.Delete
+                        .ClearComments
+                        .AddComment lastFORM
+                        .Comment.Shape.Fill.ForeColor.RGB = RGB(0, 0, 102)
+                        .Comment.Shape.TextFrame.Characters.Font.ColorIndex = 2
+                        .Comment.Shape.TextFrame.Characters.Font.Bold = True
+                        .Font.Bold = True
+                        .Font.Italic = True
+                        .Font.Color = RGB(250, 1, 1)
+                    End With
+                End If
+            End If
+        End If
+    Next
+    
+    Exit Sub
+e1:
+    LogError "ClassMaster", "rateWS_Change", Err.Description, Err
+    
+End Sub
+
+Private Sub rateWS_SelectionChange(ByVal Target As Range)
+On Error GoTo e1
+
+    Dim RTran As Range, OTran As Range
+    
+    Set RTran = rateWS.[\c_RT].EntireColumn
+    Set OTran = rateWS.[\c_OT].EntireColumn
+    
+    Set revertButtoncls = Nothing
+    
+    If Target.Cells.Count = 1 Then
+        Set lastRAN = Target
+        lastFORM = lastRAN.Formula
+        If Target.Font.Color = RGB(250, 1, 1) Then
+            Set revertButtoncls = New revertButton
+            revertButtoncls.setANCHOR2 Target
+        End If
+    End If
+
+    Exit Sub
+e1:
+    LogError "ClassMaster", "rateWS_SelectionChange", Err.Description, Err
+    
 End Sub
 
 Private Sub gcdWS_Change(ByVal Target As Range)
