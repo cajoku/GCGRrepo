@@ -35,3 +35,33 @@ e1:
     Set revertButtoncls = Nothing
     basicPROTECT WS, True
 End Sub
+
+Sub RevertValue2()
+On Error GoTo e1
+    
+    Dim WS As Worksheet
+    Dim RAN As Range
+    Dim formSTR As String
+    
+    Set RAN = activecell
+    
+    EnS 0
+    If Not RAN.Comment Is Nothing Then
+        formSTR = RAN.Comment.Text
+        RAN.Formula = formSTR
+        RAN.Comment.Delete
+    End If
+
+    RAN.EntireColumn.Cells(1, 1).Copy
+    RAN.PasteSpecial xlPasteFormats
+    
+    EnS 1
+    Application.CutCopyMode = False
+    Set revertButtoncls = Nothing
+    
+    Exit Sub
+e1:
+    LogError "revertButton_support", "RevertValue2", Err.Description, Err
+    Set revertButtoncls = Nothing
+    EnS 1, , True
+End Sub

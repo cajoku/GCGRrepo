@@ -104,3 +104,48 @@ Exit Sub
 ehandle:
     LogError "revertButton", "clearALL", Err.Description, Err
 End Sub
+
+Sub setANCHOR2(RAN As Range)
+On Error GoTo ehandle
+    'navarro|  flatten ran into a single cell, otherwise the buttons will appear in funny places on a multi cell selection
+    
+    Set anchorRAN = RAN.Cells(1, 1)
+    
+    Set WS = ActiveSheet
+    Set WB = ActiveWorkbook
+    
+    With anchorRAN
+        myL = .Left + .Width + 5 '- Wmain
+        myT = .Top + .Height / 2 - Hmain / 2
+    End With
+    
+    clearALL
+    makeMAIN2
+
+Exit Sub
+    
+ehandle:
+    LogError "revertButton", "setANCHOR2", Err.Description, Err
+End Sub
+
+Private Sub makeMAIN2()
+On Error GoTo ehandle
+
+    Set arrowSHP = WS.Shapes.AddShape(msoShapeCurvedRightArrow, myL, myT, Wmain, Hmain)
+    
+    With arrowSHP
+        .flip msoFlipVertical
+        .flip msoFlipHorizontal
+        .Fill.ForeColor.RGB = SCCIblue
+        .Line.Visible = True
+        .Line.ForeColor.RGB = SCCIblue
+        .Line.Weight = 1
+        .Name = pFIX & "arrow"
+        .OnAction = "'" & ThisWorkbook.Name & "'!" & "RevertValue2"
+    End With
+    
+Exit Sub
+
+ehandle:
+    LogError "revertButton", "makeMAIN2", Err.Description, Err
+End Sub

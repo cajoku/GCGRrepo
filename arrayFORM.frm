@@ -15,6 +15,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
 Public myW As Integer
 Public gridH As Double
 Public lastTOP As Double
