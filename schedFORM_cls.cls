@@ -29,11 +29,11 @@ Sub GetTotal()
     Dim rDur As Long: rDur = 0
     Dim pDur As Long
     
-    pDur = Val(ProjDur.Caption)
+    pDur = val(ProjDur.Caption)
     
     For Each c In CtrlFORM.Controls
         If InStr(c.Name, "Dur") Then
-            totalDur = totalDur + Val(c.Value)
+            totalDur = totalDur + val(c.Value)
         End If
     Next
 

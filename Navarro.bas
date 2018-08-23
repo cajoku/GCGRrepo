@@ -736,7 +736,7 @@ On Error GoTo e1
     Dim region As String
     Dim boo As Boolean
     
-    Const imax As Integer = 200
+    Const iMax As Integer = 200
     
     Set WS = RAN.Cells(1, 1).Parent
     Set ran1 = Intersect(RAN.EntireRow, WS.[\c_group].EntireColumn)
@@ -751,7 +751,7 @@ On Error GoTo e1
             Set ran2 = ran2.Offset(1, 0)
         Loop
         Set ran1 = ran2
-        Do Until ran2.Value = "]" Or i = imax
+        Do Until ran2.Value = "]" Or i = iMax
             i = i + 1
             If region_sectorCHK Then
                 boo = (InStr(Intersect(WS.[\c_sector].EntireColumn, ran2.EntireRow).Value, sector) > 0 Or _
@@ -767,7 +767,7 @@ On Error GoTo e1
         Loop
     End If
     
-    If i <> imax Then
+    If i <> iMax Then
         Set groupRAN = ran1.EntireRow
     End If
     
@@ -783,7 +783,7 @@ On Error GoTo e1
     Dim metricVAL As Double
     Dim cell As Range
     Dim i As Integer
-    Dim imax As Integer
+    Dim iMax As Integer
     
     'On Error GoTo quickout
     

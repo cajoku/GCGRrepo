@@ -261,7 +261,7 @@ End Sub
 Function createARRAY() As Variant
 On Error GoTo e1
 
-    Dim tARR(1 To 4, 1 To 2) As String
+    Dim tArr(1 To 4, 1 To 2) As String
     Dim sht As Worksheet
     Dim mDur As Range, wDur As Range, pcost As Range, getrange As Range
     Dim staffCount As Range
@@ -275,19 +275,19 @@ On Error GoTo e1
     'Set getrange = GetRangeVals(sDate)
     'staffCount.Value = getrange.Count
     
-    tARR(1, 1) = "Construction Duration (mos)"
-    tARR(2, 1) = "Construction Duration (wks)"
-    tARR(3, 1) = "Project Cost"
-    tARR(4, 1) = "Staff Count"
+    tArr(1, 1) = "Construction Duration (mos)"
+    tArr(2, 1) = "Construction Duration (wks)"
+    tArr(3, 1) = "Project Cost"
+    tArr(4, 1) = "Staff Count"
     
-    tARR(1, 2) = mDur.Name
-    tARR(2, 2) = wDur.Name
-    tARR(3, 2) = pcost.Name
-    tARR(4, 2) = staffCount.Name
+    tArr(1, 2) = mDur.Name
+    tArr(2, 2) = wDur.Name
+    tArr(3, 2) = pcost.Name
+    tArr(4, 2) = staffCount.Name
     
     'ReDim createARRAY(1 To 3, 1 To 2)
     
-    createARRAY = tARR
+    createARRAY = tArr
     
 Exit Function
 e1:

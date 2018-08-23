@@ -316,7 +316,7 @@ On Error GoTo e1
     Dim pcost As Double
     Dim cell As Range
     Dim i As Integer
-    Dim imax As Integer
+    Dim iMax As Integer
     
     
     Set hRan = Range(tblRAN.Cells(1, 2), tblRAN.Cells(1, 2).Offset(0, tblRAN.Columns.Count - 2))
