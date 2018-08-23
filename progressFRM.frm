@@ -18,6 +18,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private runningTIME As Double, startTIME As Double
 
 Sub progressON(titleSTR As String, Optional progressSTR As String)
